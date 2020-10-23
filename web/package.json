@@ -1,0 +1,24 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": " razzle start --inspect=9240",
+    "build": "razzle build",
+    "build:lambda": "LAMBDA=true razzle build",
+    "build:lambda:local": "LAMBDA=true PUBLIC_PATH=/dev/ razzle build",
+    "start:lambda:local": "NODE_ENV=production INSPECT=9240 sls offline",
+    "deploy:lambda": "sls deploy",
+    "test": "razzle test --env=jsdom"
+  },
+  "dependencies": {
+    "@jaredpalmer/after": "3.1.2",
+    "aws-serverless-express": "3.3.8",
+    "express": "^4.17.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-helmet": "6.1.0",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "5.2.0"
+  }
+}

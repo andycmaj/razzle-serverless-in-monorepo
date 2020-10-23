@@ -1,0 +1,40 @@
+service: web-experiment
+
+plugins:
+  - serverless-offline
+  - serverless-domain-manager
+
+custom:
+  serverless-offline:
+    port: 3000
+  customDomains:
+    - rest:
+        domainName: ${opt:stage, 'development'}-web.asynchronous.dev
+        basePath: ''
+        endpointType: 'regional'
+        certificateName: 'asynchronous.dev'
+        createRoute53Record: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${env:ENVIRONMENT, 'dev'}
+  region: us-west-2
+  environment:
+    NODE_ENV: production
+    LAMBDA: true
+
+functions:
+  renderApp:
+    memorySize: 256
+    handler: build/server.handler
+    package:
+      include:
+        - "build/**"
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: /{any+}

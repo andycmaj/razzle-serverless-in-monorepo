@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "esnext",
+    "target": "es6",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["es2017", "dom"],
+    "noEmit": true,
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin"
+      },
+    ],
+    "pretty": true
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

@@ -1,0 +1,11 @@
+shared/generated
+node_modules/
+**/node_modules/
+schema.graphql
+schema.gql
+ui
+build
+cache
+.build
+.webpack
+.serverless

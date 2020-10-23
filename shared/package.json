@@ -1,0 +1,8 @@
+{
+  "name": "shared",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "chalk": "4.1.0"
+  }
+}
