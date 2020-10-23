@@ -9,10 +9,10 @@ custom:
     port: 3000
   customDomains:
     - rest:
-        domainName: ${opt:stage, 'development'}-web.asynchronous.dev
+        domainName: ${opt:stage, 'development'}-YOUR.DOMAIN.COM
         basePath: ''
         endpointType: 'regional'
-        certificateName: 'asynchronous.dev'
+        certificateName: YOUR_CERT_NAME
         createRoute53Record: true
 
 provider:
