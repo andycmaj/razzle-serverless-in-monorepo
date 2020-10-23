@@ -1,23 +1,30 @@
 'use strict';
 const nodeExternals = require('webpack-node-externals');
 
+const transpileWorkspaceModules = (workspaces) => {
+  // most of this logic stolen from https://github.com/martpie/next-transpile-modules/blob/master/src/next-transpile-modules.js\
+  // in order to be able to directly reference workspace modules and transpile them inline
 
-const PATH_DELIMITER = '[\\\\/]'; // match 2 antislashes or one slash
+  // TODO: add these paths to webpack-dev-server's watched paths
 
-/**
- * On Windows, the Regex won't match as Webpack tries to resolve the
- * paths of the modules. So we need to check for \\ and /
- */
-const safePath = module => module.split(/[\\/]/g).join(PATH_DELIMITER);
+  const PATH_DELIMITER = '[\\\\/]'; // match 2 antislashes or one slash
 
-const generateIncludes = modules => {
-  return [
-    new RegExp(`(${modules.map(safePath).join('|')})$`),
-    new RegExp(
-      `(${modules.map(safePath).join('|')})${PATH_DELIMITER}(?!.*node_modules)`
-    ),
-  ];
-};
+  /**
+   * On Windows, the Regex won't match as Webpack tries to resolve the
+   * paths of the modules. So we need to check for \\ and /
+   */
+  const safePath = module => module.split(/[\\/]/g).join(PATH_DELIMITER);
+
+  const generateIncludes = modules => {
+    return [
+      new RegExp(`(${modules.map(safePath).join('|')})$`),
+      new RegExp(
+        `(${modules.map(safePath).join('|')})${PATH_DELIMITER}(?!.*node_modules)`
+      ),
+    ];
+  };
+  return generateIncludes(workspaces);
+}
 
 module.exports = {
   options: {
@@ -28,8 +35,7 @@ module.exports = {
     return paths;
   },
   modifyWebpackOptions: ({ options: { webpackOptions } }) => {
-    const includes = generateIncludes(['shared']);
-    // const excludes = generateExcludes(['shared']);
+    const includes = transpileWorkspaceModules(['shared']);
     webpackOptions.babelRule = {
       ...webpackOptions.babelRule,
       include: [...webpackOptions.babelRule.include, ...includes],
@@ -51,9 +57,9 @@ module.exports = {
 
     config.externals = dev
       ? [
-          // Don't try to bundle all files in yarn root workspace's node_modules
-          // https://github.com/netlify/netlify-lambda/issues/179
-          // https://www.npmjs.com/package/webpack-node-externals
+          // don't bundle node_modules into the dev bundle.
+          // this makes debugging way slower and isn't needed 
+          // for webpack-dev-server
           nodeExternals({
             modulesDir: '../node_modules',
             whitelist: [/shared/],
@@ -61,21 +67,7 @@ module.exports = {
         ]
       : [];
 
-    const isLambdaBuild = !!process.env.LAMBDA;
-    return target === 'node'
-      ? {
-          ...config,
-          output: isLambdaBuild
-            ? {
-                ...config.output,
-                libraryTarget: 'commonjs',
-              }
-            : config.output,
-          optimization: {
-            minimize: false,
-          },
-        }
-      : config;
+    return config;
   },
 };
 

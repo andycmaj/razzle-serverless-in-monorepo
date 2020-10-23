@@ -22,4 +22,5 @@ if (process.env.LAMBDA) {
   lambdaOrServer = buildLocalServer(port);
 }
 
+// must match sls function entrypoint
 export const handler = lambdaOrServer;
