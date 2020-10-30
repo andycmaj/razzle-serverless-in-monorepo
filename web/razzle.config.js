@@ -1,7 +1,7 @@
 'use strict';
 const nodeExternals = require('webpack-node-externals');
 
-const transpileWorkspaceModules = (workspaces) => {
+const transpileWorkspaceModules = workspaces => {
   // most of this logic stolen from https://github.com/martpie/next-transpile-modules/blob/master/src/next-transpile-modules.js\
   // in order to be able to directly reference workspace modules and transpile them inline
 
@@ -19,17 +19,23 @@ const transpileWorkspaceModules = (workspaces) => {
     return [
       new RegExp(`(${modules.map(safePath).join('|')})$`),
       new RegExp(
-        `(${modules.map(safePath).join('|')})${PATH_DELIMITER}(?!.*node_modules)`
+        `(${modules
+          .map(safePath)
+          .join('|')})${PATH_DELIMITER}(?!.*node_modules)`
       ),
     ];
   };
   return generateIncludes(workspaces);
-}
+};
 
 module.exports = {
   options: {
     buildType: 'serverless',
     useReactRefresh: true,
+    verbose: false,
+    cssPrefix: 'static/css',
+    jsPrefix: 'static/js',
+    mediaPrefix: 'static/media',
   },
   modifyPaths: ({ paths }) => {
     return paths;
@@ -58,11 +64,11 @@ module.exports = {
     config.externals = dev
       ? [
           // don't bundle node_modules into the dev bundle.
-          // this makes debugging way slower and isn't needed 
+          // this makes debugging way slower and isn't needed
           // for webpack-dev-server
           nodeExternals({
             modulesDir: '../node_modules',
-            whitelist: [/shared/],
+            allowlist: [/shared/],
           }),
         ]
       : [];
@@ -70,4 +76,3 @@ module.exports = {
     return config;
   },
 };
-

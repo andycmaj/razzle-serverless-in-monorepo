@@ -13,8 +13,11 @@
   },
   "dependencies": {
     "@jaredpalmer/after": "3.1.2",
+    "@react-keycloak/ssr": "3.3.0",
+    "@react-keycloak/web": "3.4.0",
     "aws-serverless-express": "3.3.8",
     "express": "^4.17.1",
+    "cookie-parser": "1.4.5",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-helmet": "6.1.0",

@@ -6,9 +6,7 @@ const Root = styled.div``;
 
 class ProtectedPage extends React.Component {
   static getInitialProps({ req, res, match }: Ctx<unknown>) {
-    return {
-      allowAnonymous: false,
-    };
+    return {};
   }
 
   render() {

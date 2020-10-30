@@ -1,10 +1,14 @@
+import React from 'react';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { render } from '@jaredpalmer/after';
 import routes from './routes';
 import Document from './Document';
 import { buildApiServer } from './api';
 import { renderToString } from 'react-dom/server';
 import { ServerStyleSheet } from 'styled-components';
+import { ExpressCookies, SSRKeycloakProvider } from '@react-keycloak/ssr';
+import { getKeycloakConfig } from './utils';
 
 let assets: any;
 let chunks: any;
@@ -18,11 +22,23 @@ export const renderApp = async (
   req: express.Request,
   res: express.Response
 ) => {
+  // 2. Create an instance of ExpressCookies passing the current request
+  const cookiePersistor = ExpressCookies(req);
+
   // define custom renderer
-  const customRenderer = (node: any) => {
+  const customRenderer = (Node: any) => {
     const sheet = new ServerStyleSheet();
     try {
-      const html = renderToString(sheet.collectStyles(node));
+      const html = renderToString(
+        sheet.collectStyles(
+          <SSRKeycloakProvider
+            keycloakConfig={getKeycloakConfig()}
+            persistor={cookiePersistor}
+          >
+            <Node />
+          </SSRKeycloakProvider>
+        )
+      );
 
       return {
         html,
@@ -53,6 +69,7 @@ export const buildLambdaServer = () =>
   express()
     .disable('x-powered-by')
     .use(express.static('build/public'))
+    .use(cookieParser()) // 1. Add cookieParser Express middleware
     .use('/api', buildApiServer())
     .get('/*', async (req: express.Request, res: express.Response) => {
       try {
@@ -68,6 +85,7 @@ export const buildLocalServer = (port: number) =>
   express()
     .disable('x-powered-by')
     .use(express.static('public'))
+    .use(cookieParser()) // 1. Add cookieParser Express middleware
     .use('/api', buildApiServer())
     .get('/*', async (req: express.Request, res: express.Response) => {
       const html = await renderApp(req, res);

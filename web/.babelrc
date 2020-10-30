@@ -1,10 +1,6 @@
 {
   "presets": [
-    [
-      "razzle/babel",
-      {
-      }
-    ]
+    "razzle/babel"
   ],
   "plugins": [
     "after",

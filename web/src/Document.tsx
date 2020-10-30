@@ -5,12 +5,25 @@ import {
   AfterData,
   AfterScripts,
   DocumentgetInitialProps,
+  ServerAppState,
 } from '@jaredpalmer/after';
 
 export default class Document extends React.Component {
   static async getInitialProps({ renderPage }: DocumentgetInitialProps) {
     debug('Doc:GetInitialProps');
     const page = await renderPage();
+    // (App: any) => (props: { data: ServerAppState }) => {
+    //   const identityProps = getIdentityProps(
+    //     ctx,
+    //     props.data.initialData ?? { allowAnonymous: false }
+    //   );
+
+    //   return (
+    //     <IdentityContext.Provider value={identityProps.session?.user || null}>
+    //       <App {...props} />
+    //     </IdentityContext.Provider>
+    //   );
+    // }
     return { ...page };
   }
 
