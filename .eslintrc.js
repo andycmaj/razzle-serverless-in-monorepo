@@ -90,13 +90,6 @@ module.exports = {
       },
     },
     {
-      // https://github.com/typescript-eslint/typescript-eslint/issues/111#issuecomment-510030930
-      files: ['**/*.tsx'],
-      rules: {
-        'local/jsx-uses-vars': 'error',
-      },
-    },
-    {
       // special rules for react components.
       files: ['web/**/*.tsx'],
       parserOptions,

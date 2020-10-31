@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FC } from 'react';
 import { useKeycloak } from '@react-keycloak/ssr';
+import type { KeycloakInstance } from 'keycloak-js';
 
 const Root = styled.div`
   text-align: center;
@@ -48,7 +49,7 @@ const CoolText = styled.code`
 `;
 
 const Home: FC = () => {
-  const { keycloak, initialized } = useKeycloak();
+  const { keycloak, initialized } = useKeycloak<KeycloakInstance>();
   if (!keycloak) {
     throw new Error();
   }
@@ -76,7 +77,14 @@ const Home: FC = () => {
         <Link to="protected">Protected Page</Link>
         <div>
           {!keycloak.authenticated ? (
-            <button onClick={() => keycloak.login()}>Login</button>
+            <button
+              onClick={() => {
+                console.log('clicked');
+                keycloak.login();
+              }}
+            >
+              Login
+            </button>
           ) : (
             <button onClick={() => keycloak.logout()}>Logout</button>
           )}

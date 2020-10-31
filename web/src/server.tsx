@@ -26,7 +26,7 @@ export const renderApp = async (
   const cookiePersistor = ExpressCookies(req);
 
   // define custom renderer
-  const customRenderer = (Node: any) => {
+  const customRenderer = (element: React.ReactElement<unknown>) => {
     const sheet = new ServerStyleSheet();
     try {
       const html = renderToString(
@@ -35,7 +35,7 @@ export const renderApp = async (
             keycloakConfig={getKeycloakConfig()}
             persistor={cookiePersistor}
           >
-            <Node />
+            {element}
           </SSRKeycloakProvider>
         )
       );

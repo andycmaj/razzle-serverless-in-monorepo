@@ -61,17 +61,17 @@ module.exports = {
       // local web stuff
     }
 
-    config.externals = dev
-      ? [
-          // don't bundle node_modules into the dev bundle.
-          // this makes debugging way slower and isn't needed
-          // for webpack-dev-server
-          nodeExternals({
-            modulesDir: '../node_modules',
-            allowlist: [/shared/],
-          }),
-        ]
-      : [];
+    if (target === 'server' && dev) {
+      config.externals = [
+        // don't bundle node_modules into the dev bundle.
+        // this makes debugging way slower and isn't needed
+        // for webpack-dev-server
+        nodeExternals({
+          modulesDir: '../node_modules',
+          allowlist: [/shared/],
+        }),
+      ];
+    }
 
     return config;
   },
