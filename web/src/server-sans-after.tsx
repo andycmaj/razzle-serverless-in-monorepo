@@ -3,7 +3,6 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { buildApiServer } from './api';
 import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
 import { ExpressCookies, SSRKeycloakProvider } from '@react-keycloak/ssr';
 import { getKeycloakConfig } from './utils';
 import { StaticRouter } from 'react-router-dom';
@@ -22,12 +21,8 @@ export const renderApp = (req: express.Request, res: express.Response) => {
   const cookiePersistor = ExpressCookies(req);
   const context: any = {};
 
-  // define custom renderer
-  // const customRenderer = (element: React.ReactElement<unknown>) => {
-  const sheet = new ServerStyleSheet();
   try {
     const reactHtml = renderToString(
-      sheet.collectStyles(
         <SSRKeycloakProvider
           keycloakConfig={getKeycloakConfig()}
           persistor={cookiePersistor}
@@ -36,11 +31,7 @@ export const renderApp = (req: express.Request, res: express.Response) => {
             <App />
           </StaticRouter>
         </SSRKeycloakProvider>
-      )
     );
-
-    // Generate all the style tags so they can be rendered into the page
-    const styleTags = sheet.getStyleTags();
 
     const htmlDocument = `<!doctype html>
       <html lang="">
@@ -56,8 +47,6 @@ export const renderApp = (req: express.Request, res: express.Response) => {
                   .join('')
               : ''
           }
-          <!-- Render the style tags gathered from the components into the DOM -->
-          ${styleTags}
       </head>
       <body>
           <div id="root">${reactHtml}</div>

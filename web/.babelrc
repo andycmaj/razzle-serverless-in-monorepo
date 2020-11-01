@@ -2,16 +2,13 @@
   "presets": [
     "razzle/babel"
   ],
-  "plugins": [
-    "after",
-    [
-      "styled-components",
-      {
-        "ssr": true,
-        "displayName": true,
-        "minify": false,
-        "transpileTemplateLiterals": true
-      }
-    ]
-  ]
+  "plugins": ["after"],
+  "env": {
+    "production": {
+      "plugins": ["emotion"]
+    },
+    "development": {
+      "plugins": [["emotion", { "sourceMap": true }]]
+    }
+  }
 }

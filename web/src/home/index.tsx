@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './react.svg';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { FC } from 'react';
 import { useKeycloak } from '@react-keycloak/ssr';

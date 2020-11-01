@@ -6,7 +6,6 @@ import routes from './routes';
 import Document from './Document';
 import { buildApiServer } from './api';
 import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
 import { ExpressCookies, SSRKeycloakProvider } from '@react-keycloak/ssr';
 import { getKeycloakConfig } from './utils';
 
