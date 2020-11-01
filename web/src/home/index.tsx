@@ -50,8 +50,8 @@ const CoolText = styled.code`
 
 const Home: FC = () => {
   const { keycloak, initialized } = useKeycloak<KeycloakInstance>();
-  if (!keycloak) {
-    throw new Error();
+  if (!(keycloak && initialized)) {
+    return null;
   }
 
   return (
